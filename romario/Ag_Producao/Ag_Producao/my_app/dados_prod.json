@@ -1,0 +1,15 @@
+[
+    {
+      "nome_produto": "Produto A",
+      "quantidade": 10,
+      "tempo_estimado": 2.5,
+      "prioridade": 1
+    },
+    {
+      "nome_produto": "Produto B",
+      "quantidade": 20,
+      "tempo_estimado": 1.5,
+      "prioridade": 2
+    }
+  ]
+  

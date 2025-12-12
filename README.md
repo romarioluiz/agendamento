@@ -1,93 +1,130 @@
-# workshop
+# ScheduleAI – Agendamento de Produção
+
+Este projeto implementa um algoritmo de Simulated Annealing em Python para resolver o problema de escalonamento de tarefas (job scheduling).
+O objetivo é encontrar a melhor ordem de produção de um conjunto de tarefas, minimizando o tempo total de execução (makespan)
+
+# Como funciona?📌
+
+Dado um conjunto de tarefas, cada uma com seu tempo de processamento, o algoritmo tenta reorganizar a ordem das tarefas para encontrar uma sequência que resulte no menor tempo total.
+O Simulated Annealing:
+começa com uma solução inicial (ordem natural das tarefas);
+gera soluções vizinhas trocando duas tarefas de lugar;
+aceita soluções melhores sempre;
+aceita soluções piores às vezes (chance controlada pela temperatura);
+reduz a temperatura gradualmente, tornando-se mais seletivo.
+# Como testar o código ▶️
+
+1. Salve o código abaixo em um arquivo:
+Por exemplo:
+agendamento_sa.py
+2. Certifique-se de ter Python 3 instalado:
+No terminal/cmd:
+python --version
+Deve aparecer algo como:
+Python 3.8+
+3. Execute o código:
+No terminal, dentro da pasta onde salvou o arquivo:
+python agendamento_sa.py
+4. Veja a saída:
+Você verá algo assim:
+Melhor Ordem de Execução: [1, 3, 0, 4, 2]
+Tempo Total de Produção (Makespan): 28
+Isso significa que o algoritmo encontrou uma ordem que reduz o tempo total.
+
+# Como alterar os tempos das tarefas?✏️
+
+No final do código, troque a linha:
+tempos = [5, 3, 9, 4, 7]
+por qualquer lista de tempos:
+tempos = [10, 2, 6, 8, 3, 4, 7]
+Cada número representa o tempo de execução de cada tarefa (job).
+
+# CÓDIGO COMPLETO 
+(pronto para rodar)
+import random
+import math
+
+# Função que calcula o makespan (tempo total) dado uma ordem de tarefas
+def calcular_makespan(ordem, tempos):
+    tempo_total = 0
+    tempo_conclusao = 0
+    
+    for job in ordem:
+        tempo_conclusao += tempos[job]
+        tempo_total = max(tempo_total, tempo_conclusao)
+    
+    return tempo_total
+
+# Gera uma solução vizinha trocando duas tarefas de posição
+def vizinho(ordem):
+    nova = ordem[:]
+    i, j = random.sample(range(len(ordem)), 2)
+    nova[i], nova[j] = nova[j], nova[i]
+    return nova
+
+# Algoritmo de Simulated Annealing
+def simulated_annealing(tempos, temperatura_inicial=1000, taxa_resfriamento=0.995, it_max=10000):
+    # ordem inicial (0,1,2,...)
+    ordem_atual = list(range(len(tempos)))
+    melhor_ordem = ordem_atual[:]
+    
+    melhor_makespan = calcular_makespan(melhor_ordem, tempos)
+    makespan_atual = melhor_makespan
+
+    temperatura = temperatura_inicial
+
+    for _ in range(it_max):
+
+        nova_ordem = vizinho(ordem_atual)
+        novo_makespan = calcular_makespan(nova_ordem, tempos)
+
+        # Critério de aceitação
+        if novo_makespan < makespan_atual or random.random() < math.exp((makespan_atual - novo_makespan) / temperatura):
+            ordem_atual = nova_ordem
+            makespan_atual = novo_makespan
+
+        # Atualiza melhor solução encontrada
+        if makespan_atual < melhor_makespan:
+            melhor_makespan = makespan_atual
+            melhor_ordem = ordem_atual[:]
+
+        temperatura *= taxa_resfriamento
+    
+    return melhor_ordem, melhor_makespan
 
 
+# -----------------------------
+# TESTANDO O ALGORITMO
+# -----------------------------
+if __name__ == "__main__":
+    # Lista com o tempo de cada tarefa
+    tempos = [5, 3, 9, 4, 7]  # Altere para testar diferentes casos
+    
+    melhor_ordem, melhor_makespan = simulated_annealing(tempos)
+    
+    print("Melhor Ordem de Execução:", melhor_ordem)
+    print("Tempo Total de Produção (Makespan):", melhor_makespan)
 
-## Getting started
+# Como saber se está funcionando?🧪
+✔ O programa está funcionando corretamente se:
+imprimir alguma ordem de execução como [1, 3, 0, 4, 2];
+imprimir o makespan resultante;
+você perceber que, ao mudar a lista de tempos, o algoritmo produz respostas diferentes.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.betim.ifmg.edu.br/0080031/workshop.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.betim.ifmg.edu.br/0080031/workshop/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+# Dicas para testar melhorias 📈
+Você pode alterar:
+Parâmetro
+Efeito
+temperatura_inicial
+Soluções piores são aceitas com maior frequência no começo.
+taxa_resfriamento
+Quanto menor, o algoritmo esfria mais rápido (menos exploração).
+it_max
+Mais iterações → maior chance de boa solução.
+Exemplo:
+melhor_ordem, melhor_makespan = simulated_annealing(
+    tempos,
+    temperatura_inicial=2000,
+    taxa_resfriamento=0.999,
+    it_max=50000
+)

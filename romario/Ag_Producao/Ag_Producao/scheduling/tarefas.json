@@ -1,0 +1,8 @@
+{
+"method": "sa",
+"tarefas": [
+{"id": "A", "tempo": 4, "deadline": 12},
+{"id": "B", "tempo": 2, "deadline": 5},
+{"id": "C", "tempo": 6, "deadline": 18}
+]
+}

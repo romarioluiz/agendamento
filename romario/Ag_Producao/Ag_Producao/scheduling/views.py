@@ -1,58 +1,46 @@
-# views.py
-
-from django.shortcuts import render
-from rest_framework.response import Response
+##
 from rest_framework.decorators import api_view
-from django.http import HttpRequest, JsonResponse
-from .models import TarefaProducao
+from rest_framework.response import Response
+from rest_framework import status
 
-# Função simples de otimização (pode ser expandida conforme necessário)
-def otimizar_agendamento(tarefas):
-    # Aqui você pode colocar a lógica do seu algoritmo de otimização.
-    # Este exemplo só vai ordenar as tarefas por prioridade e tempo estimado.
-    return sorted(tarefas, key=lambda x: (x.prioridade, x.tempo_estimado))
+from .algorithms.busca import busca_local
+from .algorithms.sa import simulated_annealing
 
-@api_view(["GET", "POST"])
-def optimize(request: HttpRequest) -> Response:
-    if request.method == "GET":
-        # Resposta simples para o método GET
-        return JsonResponse({"message": "Bem-vindo ao ScheduleAI!"})
-    
-    elif request.method == "POST":
-        # Recebe os dados do corpo da requisição (formato JSON)
-        try:
-            dados = request.data  # Exemplo: [{"nome_produto": "Produto A", "quantidade": 10, "tempo_estimado": 2.5}]
-            
-            # Verificando se o corpo da requisição contém os dados necessários
-            if not dados:
-                return JsonResponse({"error": "Nenhum dado de produção fornecido."}, status=400)
-            
-            # Processar os dados de produção (simulando inserção no banco de dados)
-            tarefas = []
-            for item in dados:
-                tarefa = TarefaProducao(
-                    nome_produto=item["nome_produto"],
-                    quantidade=item["quantidade"],
-                    tempo_estimado=item["tempo_estimado"],
-                    prioridade=item.get("prioridade", 1),  # A prioridade pode ser opcional
-                )
-                tarefa.save()  # Salva a tarefa no banco de dados
-                tarefas.append(tarefa)
+@api_view(["POST"])
+def optimize(request):
+    """
+    Endpoint responsável por otimizar o escalonamento de tarefas
+    usando Busca Local ou Simulated Annealing.
+    """
 
-            # Agora, vamos otimizar o agendamento usando o algoritmo
-            tarefas_otimizadas = otimizar_agendamento(tarefas)
+    # 1️⃣ Lê o JSON enviado
+    metodo = request.data.get("method", "busca")
+    tarefas = request.data.get("tarefas", [])
 
-            # Preparar a resposta com os dados otimizados
-            resposta = []
-            for tarefa in tarefas_otimizadas:
-                resposta.append({
-                    "nome_produto": tarefa.nome_produto,
-                    "quantidade": tarefa.quantidade,
-                    "tempo_estimado": tarefa.tempo_estimado,
-                    "prioridade": tarefa.prioridade,
-                })
+    # 2️⃣ Validação simples
+    if not tarefas:
+        return Response(
+            {"erro": "Lista de tarefas vazia ou não enviada"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-            return JsonResponse({"agendamento_otimizado": resposta}, status=200)
-        
-        except Exception as e:
-            return JsonResponse({"error": f"Ocorreu um erro: {str(e)}"}, status=500)
+    # 3️⃣ Escolhe o algoritmo
+    if metodo == "sa":
+        solucao, custo = simulated_annealing(tarefas)
+    elif metodo == "busca":
+        solucao, custo = busca_local(tarefas)
+    else:
+        return Response(
+            {"erro": "Método inválido. Use 'busca' ou 'sa'."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # 4️⃣ Retorno da API
+    return Response(
+        {
+            "metodo": metodo,
+            "solucao": solucao,
+            "atraso_total": custo
+        },
+        status=status.HTTP_200_OK
+    )

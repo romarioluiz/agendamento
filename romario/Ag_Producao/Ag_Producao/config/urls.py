@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from my_app import urls
+from scheduling import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),

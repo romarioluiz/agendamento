@@ -58,6 +58,9 @@ def tarefa_list(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def optimize(request):
+
+    
+
     """
     Endpoint responsável por otimizar o escalonamento de tarefas
     usando Busca Local ou Simulated Annealing.
@@ -70,6 +73,12 @@ def optimize(request):
         max_iter = request.data.get("max_iter", 1000)
         objetivo = request.data.get("objetivo", "tempo")  # 'tempo' ou 'penalidade'
         
+        # ✅ ADICIONAR: Identificação do teste cruzado
+        grupo_tester = request.data.get("grupo_tester")
+        instancia_id = request.data.get("instancia_id")
+        teste_id = request.data.get("teste_id")
+
+
         # 2️⃣ Validação
         if not tarefas:
             return Response(
@@ -171,8 +180,49 @@ def optimize(request):
                 "utilizacao_media": round(sum(tempos_maquinas) / (num_maquinas * max(tempos_maquinas)), 3) if tempos_maquinas and max(tempos_maquinas) > 0 else 0
             },
             "agendamento_id": agendamento_id
+
+
+            
+
+
+
+
         }
-        
+        # ✅ MODIFICAR a resposta final:
+        resposta = {
+            # METADADOS para teste cruzado (adicionar no início)
+            "metadata": {
+                "teste_id": teste_id or f"teste_{int(time.time())}",
+                "instancia_id": instancia_id or "custom",
+                "grupo_tester": grupo_tester or "Desconhecido",
+                "grupo_tested": "Ag_Producao",  # Seu grupo
+                "data_hora": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "algoritmo_utilizado": metodo.upper(),
+                "versao_api": "1.0"
+            },
+            
+            # SEUS DADOS ATUAIS (mantenha tudo)
+            "metodo": metodo,
+            "objetivo": objetivo,
+            "solucao": solucao,
+            "custo_total": custo,
+            "resultado_detalhado": resultado_detalhado,
+            "estatisticas": {
+                "tempo_execucao_segundos": round(tempo_execucao, 3),
+                "num_tarefas": len(solucao),
+                "num_maquinas": num_maquinas,
+                "tempos_por_maquina": tempos_maquinas,
+                "makespan": max(tempos_maquinas) if tempos_maquinas else custo,
+                "utilizacao_media": round(sum(tempos_maquinas) / (num_maquinas * max(tempos_maquinas)), 3) if tempos_maquinas and max(tempos_maquinas) > 0 else 0,
+                # ✅ ADICIONAR: Métricas para avaliação
+                "balanceamento_carga": round(min(tempos_maquinas)/max(tempos_maquinas), 4) if tempos_maquinas and max(tempos_maquinas) > 0 else 0,
+                "penalidade_total": resultado_detalhado.get('penalidade', 0)
+            },
+            "agendamento_id": agendamento_id,
+            
+            # ✅ ADICIONAR: Histórico de convergência (se disponível)
+            "historico_convergencia": resultado.get("historico", {}) if metodo == "sa" else {}
+        }
         return Response(resposta, status=status.HTTP_200_OK)
         
     except Exception as e:
@@ -180,6 +230,11 @@ def optimize(request):
             {"erro": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+
+
+
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -327,3 +382,73 @@ def dashboard(request):
     Dashboard do ScheduleAI
     """
     return render(request, 'scheduling/dashboard.html')
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def health_check(request):
+    """
+    Endpoint para verificar se a API está online
+    IMPORTANTE para teste cruzado entre grupos
+    """
+    import time
+    import platform
+    import sys
+    
+    return Response({
+        "status": "online",
+        "service": "Ag_Producao - Sistema de Agendamento",
+        "version": "1.0",
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        
+        "system_info": {
+            "python_version": sys.version.split()[0],
+            "platform": platform.platform(),
+            "server_time": time.strftime("%Y-%m-%d %H:%M:%S %Z")
+        },
+        
+        "endpoints": {
+            "optimize": {
+                "method": "POST",
+                "url": "/api/optimize/",
+                "description": "Otimização principal (para teste cruzado)",
+                "required_fields": ["tarefas", "method"]
+            },
+            "tarefas_exemplo": {
+                "method": "GET", 
+                "url": "/api/tarefas/exemplo/",
+                "description": "Tarefas de exemplo para teste"
+            },
+            "agendamentos": {
+                "method": "GET",
+                "url": "/api/agendamentos/",
+                "description": "Histórico de agendamentos"
+            },
+            "health": {
+                "method": "GET",
+                "url": "/api/health/",
+                "description": "Este endpoint"
+            }
+        },
+        
+        "algorithms": {
+            "simulated_annealing": {
+                "available": True,
+                "parameters": ["temp_inicial", "temp_min", "alpha", "max_iter"]
+            },
+            "busca_local": {
+                "available": True,
+                "parameters": ["max_iter", "vizinhanca"]
+            }
+        },
+        
+        "metrics_provided": [
+            "makespan",
+            "tempo_execucao_segundos", 
+            "balanceamento_carga",
+            "penalidade_total",
+            "utilizacao_media"
+        ],
+        
+        "message": "API pronta para teste cruzado. Use POST /api/optimize/ para testar."
+    })

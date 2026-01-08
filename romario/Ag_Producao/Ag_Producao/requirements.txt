@@ -26,4 +26,4 @@ unidecode
 djangorestframework-simplejwt
 django-cors-headers
 httpie
-
+gunicorn

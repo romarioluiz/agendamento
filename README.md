@@ -150,3 +150,104 @@ Ag_Producao/
 | alpha        | 0.95         | Taxa de resfriamento (0.9-0.99) |
 | max_iter     | 100          | Iterações por temperatura       |
 
+### Busca Local
+
+| Parâmetro  | Valor Padrão | Descrição                       |
+|------------|--------------|---------------------------------|
+| max_iter   | 1000         | Máximo de iterações             |
+| vizinhanca | "swap"       | Tipo de movimento na vizinhança |
+
+
+## 📈 Métricas Retornadas
+A API retorna as seguintes métricas para avaliação:
+
+| Métrica                 | Descrição                 | Ideal                |
+|-------------------------|---------------------------|----------------------|
+| makespan                | Tempo total de conclusão  | Quanto menor, melhor |
+| balanceamento_carga     | Equilíbrio entre máquinas | Próximo de 1.0       |
+| tempo_execucao_segundos | Tempo do algoritmo        | < 3 segundos         |
+| penalidade_total        | Soma dos atrasos          | 0 (nenhum atraso)    |
+| utilizacao_media        | % de uso das máquinas     | > 70%                |
+
+## 🧪 Casos de Teste Padronizados
+
+Para teste cruzado entre grupos, utilize:
+
+1. Instância Pequena - 5 tarefas, 2 máquinas (validação funcional)
+
+2. Instância Média - 10 tarefas, 3 máquinas (teste de performance)
+
+3. Instância Complexa - 15 tarefas, 4 máquinas (escalabilidade)
+
+Consulte docs/TESTES_INTERGRUPAIS.md para exemplos completos.
+
+## 👥 Teste Cruzado entre Grupos
+Para outros grupos testarem:
+
+- Verifique se nossa API está online: GET /api/health/
+
+- Execute casos de teste padronizados
+
+- Avalie pelas métricas retornadas
+
+- Preencha o template em relatorios/TEMPLATE_TESTE_CRUZADO.md
+
+## Métricas de avaliação:
+
+- ✅ Tempo de resposta: < 3 segundos
+
+- ✅ Qualidade da solução: makespan competitivo
+
+- ✅ Estabilidade: resultados consistentes
+
+- ✅ Documentação: clara e completa
+
+## 🐛 Solução de Problemas Comuns
+
+### "API não responde"
+
+```
+# Verifique se o servidor está rodando
+python manage.py runserver
+
+# Teste a saúde da API
+curl http://localhost:8000/api/health/
+
+```
+### "Erro 404 - Página não encontrada"
+
+- Certifique-se de usar a porta 8000
+
+- URL correta: http://localhost:8000/dashboard/
+
+- Verifique se digitou /dashboard/ no final
+
+
+### "Erro ao instalar dependências"
+
+```
+# Atualize o pip
+pip install --upgrade pip
+
+# Tente instalar novamente
+pip install -r requirements.txt
+
+```
+ ## 📄 Licença
+Este projeto foi desenvolvido para fins acadêmicos no IFMG - Campus Betim como parte da disciplina de Otimização e Inteligência Artificial.
+
+## 👨‍🎓 Autores
+- *Romário* - Desenvolvimento, algoritmos e documentação
+
+Colegas de Grupo - Testes 
+
+📞 Suporte
+Para questões sobre o projeto:
+
+Issues no GitLab: https://gitlab.betim.ifmg.edu.br/0080031/workshop
+
+Contato: [seu-email]@ifmg.edu.br
+
+🎯 Status do Projeto: ✅ PRONTO PARA TESTE CRUZADO
+Última atualização: Janeiro 2026
+Versão: 1.0

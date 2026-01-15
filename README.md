@@ -102,3 +102,41 @@ curl -X POST http://localhost:8000/api/optimize/ \
   }'
 
   ```
+
+  ## 🏗️ Arquitetura do Sistema
+
+
+```
+Frontend (Dashboard Django)
+        ↓
+   API REST Django
+        ↓
+  Algoritmos de Otimização
+    ├── Simulated Annealing
+    └── Busca Local
+        ↓
+   Banco de Dados SQLite
+        ↓
+   Visualização de Resultados
+```
+
+
+## 📁 Estrutura do Projeto
+```
+Ag_Producao/
+├── algorithms/          # Implementação dos algoritmos
+│   ├── sa.py           # Simulated Annealing
+│   └── busca.py        # Busca Local
+├── scheduling/         # Aplicação Django principal
+│   ├── views.py        # Endpoints da API
+│   ├── models.py       # Modelos de dados
+│   ├── templates/      # Interface web
+│   └── static/         # Arquivos estáticos
+├── config/             # Configuração Django
+├── docs/              # Documentação técnica
+├── relatorios/        # Templates para testes
+├── manage.py          # Script de administração
+└── requirements.txt   # Dependências do projeto
+```
+
+## ⚙️ Parâmetros dos Algoritmos

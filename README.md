@@ -87,3 +87,18 @@ Documentação automática
 ### Teste via API (para outros grupos)
 
 ```
+curl -X POST http://localhost:8000/api/optimize/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "grupo_tester": "SeuGrupo",
+    "method": "sa",
+    "tarefas": [
+      {"id": "T1", "nome": "Montagem", "duracao": 5, "deadline": 10},
+      {"id": "T2", "nome": "Pintura", "duracao": 3, "deadline": 8}
+    ],
+    "num_maquinas": 3,
+    "max_iter": 1000,
+    "objetivo": "tempo"
+  }'
+
+  ```

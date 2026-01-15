@@ -234,7 +234,7 @@ pip install -r requirements.txt
 
 ```
  ## 📄 Licença
-Este projeto foi desenvolvido para fins acadêmicos no IFMG - Campus Betim como parte da disciplina de Otimização e Inteligência Artificial.
+Este projeto foi desenvolvido para fins acadêmicos no IFMG - Campus Betim como parte da disciplina de Introdução da Ciência da Computação 2.
 
 ## 👨‍🎓 Autores
 - *Romário* - Desenvolvimento, algoritmos e documentação

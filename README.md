@@ -1,4 +1,4 @@
-# 🏭 Ag_Producao - Sistema Inteligente de Agendamento de Produção
+# 🏭  - Sistema Inteligente de Agendamento de Produção
 
 > **Sistema web completo para otimização de tarefas em ambientes de produção utilizando algoritmos de Inteligência Artificial**
 
@@ -11,7 +11,7 @@
 
 ### 🔧 Instalação Rápida (3 minutos)
 
-```bash
+```
 # 1. Clone o repositório
 git clone https://gitlab.betim.ifmg.edu.br/0080031/workshop.git
 cd workshop/Ag_Producao
@@ -34,3 +34,56 @@ python manage.py createsuperuser
 
 # 6. Execute o servidor
 python manage.py runserver
+
+```
+
+
+## 🌐 Acesso ao Sistema 
+- Dashboard: http://localhost:8000/dashboard/
+- API Health Check: http://localhost:8000/api/health/
+- Documentação da API: http://localhost:8000/api/docs/
+
+## 📊 Funcionalidades Principais
+
+### 🎯 Otimização Inteligente
+
+- Simulated Annealing - Algoritmo meta-heurístico para busca global
+
+- Busca Local - Algoritmo de melhoria iterativa
+
+- Múltiplos objetivos - Minimizar tempo total ou atrasos
+
+- Configuração flexível - Número variável de máquinas e tarefas
+
+### 🖥️ Interface Web
+- Dashboard intuitivo para envio de tarefas
+
+- Visualização em tempo real dos resultados
+
+- Gráficos de distribuição por máquina
+
+- Histórico de agendamentos executados
+
+## 🔌 API REST Completa
+Endpoint /api/optimize/ para integração
+
+Formato JSON padronizado
+
+Metadados para teste cruzado entre grupos
+
+Documentação automática
+
+## 🧪 Como Testar
+
+### Teste Rápido (1 minuto)
+1. Acesse http://localhost:8000/dashboard/
+
+2. Clique em "Carregar Tarefas de Exemplo"
+
+3. Clique em "Executar Otimização"
+
+4. Veja os resultados automaticamente
+
+### Teste via API (para outros grupos)
+
+```

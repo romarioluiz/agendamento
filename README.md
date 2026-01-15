@@ -140,3 +140,13 @@ Ag_Producao/
 ```
 
 ## ⚙️ Parâmetros dos Algoritmos
+
+### Simulated Annealing
+
+| Parâmetro    | Valor Padrão | Descrição                       |
+|--------------|--------------|---------------------------------|
+| temp_inicial | 1000         | Temperatura inicial do SA       |
+| temp_min     | 0.1          | Temperatura mínima para parada  |
+| alpha        | 0.95         | Taxa de resfriamento (0.9-0.99) |
+| max_iter     | 100          | Iterações por temperatura       |
+

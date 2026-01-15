@@ -1,30 +1,36 @@
-ScheduleAI — Sistema Web Inteligente para Agendamento de Produção
+# 🏭 Ag_Producao - Sistema Inteligente de Agendamento de Produção
 
-Descrição Geral
-O ScheduleAI é um sistema web desenvolvido em Python + Django para resolver o problema de Escalonamento de Tarefas (Job Scheduling),
-um problema NP-Difícil, utilizando heurísticas e metaheurísticas.
+> **Sistema web completo para otimização de tarefas em ambientes de produção utilizando algoritmos de Inteligência Artificial**
 
-Objetivo
-Minimizar o atraso total das tarefas de produção, organizando a melhor ordem de execução.
+## 🚀 Começando
 
-O que o código faz
-- Recebe uma lista de tarefas com tempo e deadline
-- Aplica Busca Local ou Simulated Annealing
-- Calcula o atraso total
-- Retorna a melhor sequência encontrada via API REST
+### 📋 Pré-requisitos
+- Python 3.8 ou superior
+- pip (gerenciador de pacotes do Python)
+- Git (para controle de versão)
 
-Exemplo de JSON de entrada
+### 🔧 Instalação Rápida (3 minutos)
 
-{
-  "method": "sa",
-  "tarefas": [
-    { "id": "A", "tempo": 4, "deadline": 12 },
-    { "id": "B", "tempo": 2, "deadline": 5 },
-    { "id": "C", "tempo": 6, "deadline": 18 }
-  ]
-}
+```bash
+# 1. Clone o repositório
+git clone https://gitlab.betim.ifmg.edu.br/0080031/workshop.git
+cd workshop/Ag_Producao
 
-Como testar
-1. Inicie o servidor: python manage.py runserver
-2. Envie o JSON para /api/optimize/
-3. O sistema retorna a ordem otimizada e o atraso total
+# 2. Crie e ative um ambiente virtual (recomendado)
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
+
+# 3. Instale as dependências
+pip install -r requirements.txt
+
+# 4. Configure o banco de dados
+python manage.py migrate
+
+# 5. Crie um superusuário (opcional)
+python manage.py createsuperuser
+
+# 6. Execute o servidor
+python manage.py runserver

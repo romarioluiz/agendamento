@@ -2,6 +2,13 @@
 
 > **Sistema web completo para otimização de tarefas em ambientes de produção utilizando algoritmos de Inteligência Artificial**
 
+ - [Especificaçoes](.romario/Ag_Producao/Ag_Producao/docs)
+ - [Parametros]
+ - [Testes]
+
+
+
+
 ## 🚀 Começando
 
 ### 📋 Pré-requisitos
@@ -12,14 +19,19 @@
 ### 🔧 Instalação Rápida (3 minutos)
 
 ```
-# 1. Clone o repositório
+# 1. Clone o repositório e abra o terminal em git bash
+
 git clone https://gitlab.betim.ifmg.edu.br/0080031/workshop.git
-cd workshop/Ag_Producao
+
+cd romario/Ag_Producao/Ag_Producao
 
 # 2. Crie e ative um ambiente virtual (recomendado)
+
 python -m venv venv
+
 # Windows:
 venv\Scripts\activate
+
 # Linux/Mac:
 source venv/bin/activate
 
@@ -36,11 +48,13 @@ python manage.py createsuperuser
 python manage.py runserver
 
 ```
+Verifique se a api está online em :
 
+- API Health Check: http://localhost:8000/api/health/
 
 ## 🌐 Acesso ao Sistema 
 - Dashboard: http://localhost:8000/dashboard/
-- API Health Check: http://localhost:8000/api/health/
+
 - Documentação da API: http://localhost:8000/api/docs/
 
 ## 📊 Funcionalidades Principais
@@ -62,7 +76,7 @@ python manage.py runserver
 
 - Gráficos de distribuição por máquina
 
-- Histórico de agendamentos executados
+- Histórico de agendamentos executados (em desenvolvimento)
 
 ## 🔌 API REST Completa
 Endpoint /api/optimize/ para integração

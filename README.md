@@ -2,7 +2,7 @@
 
 > **Sistema web completo para otimização de tarefas em ambientes de produção utilizando algoritmos de Inteligência Artificial**
 
- - [Especificaçoes](.romario/Ag_Producao/Ag_Producao/docs)
+ - [Especificaçoes](romario/Ag_Producao/Ag_Producao/docs/ESPECIFICACAO.md)
  - [Parametros]
  - [Testes]
 
